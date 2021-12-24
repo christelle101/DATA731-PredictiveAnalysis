@@ -81,7 +81,7 @@ def AR_model(debut, fin, serie, vrai_spectre):
     H1 = np.append([1], H)
     
     #on trace la série entre 0 et le début de l'intervalle
-    plt.plot(t[debut : fin], y[debut : fin], label = 'Data = juxtaposition de 3 sous-series stationnaires')
+    plt.plot(t[debut : fin], y[debut : fin])
     plt.title(serie)
     plt.show()
     
@@ -94,10 +94,17 @@ def AR_model(debut, fin, serie, vrai_spectre):
     	f, mag[1],
     	':r',
         f, vrai_spectre,':b',
-        linewidth=4,
+        linewidth = 2,
     )
     plt.title('Spectre / Calcul sur l intervalle [{} {}]'.format(debut, fin))
     plt.legend(['ordre4', 'ordre3',"vrai spectre"])
     return plt.show()
 
-AR_model(1, 1536, "serie 1", mag[0])
+#calcul sur l'intervalle de 1 à 1536
+#AR_model(1, 1536, "serie 1", mag[0])
+
+#calcul sur l'intervalle 1 à 256
+#AR_model(1, 256, "Série 1 sur l'intervalle [1, 256]", mag[0])
+
+#calcul sur l'intervalle de 350 à 605
+AR_model(350, 605, "Série 1 sur l'intervalle [350, 605]", mag[0])
