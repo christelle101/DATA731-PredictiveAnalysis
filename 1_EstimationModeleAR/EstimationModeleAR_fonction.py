@@ -1,25 +1,33 @@
-import random as aleas  # pour generer des nombres aleatoires et +
-import matplotlib.pyplot as plt # pour les graphiques
-from scipy.signal import freqz   # pour avoir le TF de l'autocorrelation
-import numpy as np #pour gerer les moyennes + covariances +++
-####################################################################
-#############   EXERCICE 3 / Partie 1            ###################
-####################################################################
-n=1536 #  nombre de donnees a genener
-#% Sequences des parametres des 3 modeles AR du second ordre
+import random as aleas  
+import matplotlib.pyplot as plt 
+from scipy.signal import freqz   
+import numpy as np 
+"""
+    random : pour generer des nombres aleatoires
+    matplotlib.pyplot : pour generer des graphiques et gerer leur construction
+    scipy.signal : pour avoir le TF de l'autocorrelation
+    numpy : pour implementer les moyennes et les covariances
+"""
+
+#On commence par générer n données
+n=1536 
+
+# Sequences des parametres des 3 modeles AR du second ordre
 a=[
     [1,-0.1344,0.9025], # coefficients du premier processus AR
     [1,-1.6674,0.9025], # Ccoefficients du second processus AR
     [1, 1.7820,0.8100]  # coefficients du troisieme processus AR
 ]
-####################################################################
-## Generer une serie temporelle (non-stationnaire globalement)
-##    composee de 3 blocs stationnaires
-####################################################################
-####################################################################
-## Generation et juxtaposition des 3 blocs de largeur n/3 chacun
+
+"""
+    On génère une série temporelle (non-stationnaire globalement),
+    et composée de 3 blocs stationnaires. Ensuite, on juxtapose les
+    3 blocs de largeur n/3 chacun. Ensuite, on trace la série globale.
+"""
 t=range(-2,n-1)
+
 y=[k*0 for k in t]
+
 for k in range(1,int(n/3)):
     y[k+1]=-a[0][1]*y[k]-a[0][2]*y[k-1]+aleas.gauss(0,1)
 for k in range(int(n/3)+1,2*int(n/3)):
@@ -28,17 +36,16 @@ for k in range(2*int(n/3)+1,n):
     y[k+1]=-a[2][1]*y[k]-a[2][2]*y[k-1]+aleas.gauss(0,1)
 y=y[3:]  # suppression des donnees transitoires
 t=t[3:]
+
 # Trace- de la serie
 plt.plot(t,y,label='Data = juxtapososition de 3 sous-series stationnaires')
 plt.show()
-#
-###########################################################################
-#%%
-###########################################################################
-# Calcul et trace-s des spectres des trois sous-series a partir de freqz
-#  Puisque l on connait les coefficients, le calcul est fait directement
-#  a- partir des coefficients (ne depend donc pas du nombre d-echantillons) 
-# 
+
+""""
+    On utilise freqz pour calculer et tracer les spectres des trois sous-series.
+    Puisqu'on connaît les coefficients, le calcul se fait directement à partir 
+    des coefficients et ne dépend donc pas du nombre d'échantillons.
+""" 
 def spectre(*args): 
 	Np = 256 # nombre de points du spectre
 	f=freqz(1,args[0],Np)[0] # recuperer les echantillons de frequences (abscisses)
@@ -47,26 +54,27 @@ def spectre(*args):
 		mag.append(abs(freqz(1,arg,Np)[1])) # calcul du spectre de chaque sous-serie
 	return (f,mag)
 
-"""f,mag=spectre(a[0],a[1],a[2])
-spectre1 = mag[0]
-spectre2 = mag[1]
-spectre3 = mag[2]"""
 
 f,mag=spectre(a[0],a[1],a[2])
+
 ## Calcul des spectres des trois sous-series 
 plt.semilogy(
 	f,mag[0],'-g',
 	f,mag[1],':b',
 	f,mag[2],'--r'
 )
+
 ## Traces des spectres des trois sous-series 
 plt.show()
-#
+
+"""
+    On choisit de décrire y par un modèle AR d'ordre 3, puis d'ordre 4.
+"""
 ###########################################################################
 #%%
 # On choisit de decrire y par un modele AR d-ordre 3, puis d-ordre 4.
+
 #    Estimation des coefficients des modeles AR d-ordres 3 et 4
-# re-utiliser la partie deja ecrite pour superposer les estimations locales de spectres avec le resultat escompte-
 def AR_model(debut, fin, serie, vrai_spectre):
     D = np.cov([
         y[debut : fin] + [0, 0, 0, 0],
