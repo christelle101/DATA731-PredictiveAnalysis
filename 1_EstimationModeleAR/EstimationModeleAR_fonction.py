@@ -9,6 +9,7 @@ import numpy as np
     numpy : pour implementer les moyennes et les covariances
 """
 
+
 #On commence par générer n données
 n=1536 
 
@@ -18,6 +19,8 @@ a=[
     [1,-1.6674,0.9025], # Ccoefficients du second processus AR
     [1, 1.7820,0.8100]  # coefficients du troisieme processus AR
 ]
+
+
 
 """
     On génère une série temporelle (non-stationnaire globalement),
@@ -40,6 +43,8 @@ t=t[3:]
 # Trace- de la serie
 plt.plot(t,y,label='Data = juxtapososition de 3 sous-series stationnaires')
 plt.show()
+
+
 
 """"
     On utilise freqz pour calculer et tracer les spectres des trois sous-series.
@@ -67,15 +72,26 @@ plt.semilogy(
 ## Traces des spectres des trois sous-series 
 plt.show()
 
+
+
 """
     On choisit de décrire y par un modèle AR d'ordre 3, puis d'ordre 4.
 """
-###########################################################################
-#%%
-# On choisit de decrire y par un modele AR d-ordre 3, puis d-ordre 4.
 
 #    Estimation des coefficients des modeles AR d-ordres 3 et 4
 def AR_model(debut, fin, serie, vrai_spectre):
+    """
+        : parametre debut : debut de l'intervalle
+        : parametre fin : fin de l'intervalle
+        : parametre serie : nom de la serie à modéliser
+        : parametre vrai_spectre : vrai spectre à comparer aux résultats 
+        : type debut : int
+        : type fin : int
+        : type serie : string
+        : type vrai_spectre : spectre
+        : return : la serie temporelle et la comparaison entre les spectres
+        : type return : plt.show
+    """
     D = np.cov([
         y[debut : fin] + [0, 0, 0, 0],
         [0] + y[debut : fin] + [0, 0, 0],
@@ -108,6 +124,14 @@ def AR_model(debut, fin, serie, vrai_spectre):
     plt.legend(['ordre4', 'ordre3',"vrai spectre"])
     return plt.show()
 
+
+
+"""
+    EXECUTION :
+        
+    On exécute la fonction AR_model sur différents intervalles, ainsi que sur
+    différents spectres, conformément au fichier MATLAB associé.
+"""
 #calcul sur l'intervalle de 1 à 1536
 #AR_model(1, 1536, "serie 1", mag[0])
 
