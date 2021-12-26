@@ -63,9 +63,6 @@ plt.show()
 print(modele_fitted.sigma2)
 yf1 = lfilter(coeffAR1[0:9],1,y1)
 
-"""Synth2=lfilter(1,a[0:9],rand)
-Synth3 = lfilter(1,a[0:9],yf1)"""
-
 plt.plot(y1[4:], 'b-', label='data')
 plt.plot(modele_fitted.fittedvalues[4:], 'r-', label='data')
 plt.show()
