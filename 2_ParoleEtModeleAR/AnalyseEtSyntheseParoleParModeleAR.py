@@ -5,12 +5,10 @@ from scipy.io import loadmat
 import sounddevice as sd
 import matplotlib.pyplot as plt
 import numpy as np
-import statsmodels.api as sm
 import warnings
-import statsmodels.formula.api as smf 
 from statsmodels.tsa.ar_model import AR
-from scipy.signal import lfilter, hamming, freqz, deconvolve, convolve
-import random as aleas
+from scipy.signal import lfilter
+import time
 
 warnings.filterwarnings("ignore")
 
@@ -70,3 +68,42 @@ plt.show()
 plt.plot(y1[0:], 'b-', label='data')
 plt.plot(yf1[0:], 'g-', label='data')
 plt.show()
+
+n = 150
+res = y1- yf1
+
+m1=ordreAR+1
+k=1
+residuel = y1-yf1
+
+NbTrames = int((n2-n1+1)/m)
+for k in range(1,NbTrames-1):
+    y2 = y[k*m -m1 + 1 : (k+1)*m]
+    model = AR(y2)
+    model_fitted = model.fit()
+    coeffsAR = model_fitted.params
+    yf2 = lfilter(coeffsAR[1:8],1,y2)
+    residuel2 = y2[m1:m1+m-1]-yf2[m1:m1+m-1]
+    residuel = np.concatenate((residuel,residuel2), axis=0)
+    
+    if k< 10:
+        
+        plt.plot(yf2[m1:m1+m-1], 'g-', label='data')
+        plt.plot(y2[m1:m1+m-1], 'b-', label='data')
+        plt.title("Trame %d, Estimée vs Réalité "%k)
+        plt.legend('estimee','Vraie')
+        plt.grid()
+        plt.show()
+
+plt.plot(residuel) 
+plt.title("Paroles estimées")
+plt.grid()
+plt.show()
+plt.plot(y) 
+plt.title("Vraies Paroles")
+plt.grid()
+plt.show()
+
+sd.play(residuel, 8192)
+time.sleep(3)
+sd.play(residuel, 8192)
