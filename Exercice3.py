@@ -237,3 +237,42 @@ plt.grid()
 plt.legend('spectre1')
 plt.title("Spectre de la somme")
 plt.show()
+
+
+"""
+    QUESTION 5 - Modèles AR de plusieurs ordres [NOT WORKING YET]
+"""
+
+def AR_n(debut, fin, serie, vrai_spectre, ordre1, ordre2):
+    D = np.cov([
+        y[debut : fin] + [0, 0, 0, 0],
+        [0] + y[debut : fin] + [0, 0, 0],
+        [0, 0] + y[debut : fin] + [0, 0],
+        [0, 0, 0] + y[debut : fin] + [0],
+        [0, 0, 0, 0] + y[debut : fin]])
+    
+    E = - np.linalg.inv(D[0:ordre1, 0:ordre1]) @ D[0, 1:ordre1+1].reshape(ordre1, 1)  # ordre 
+    H = - np.linalg.inv(D[0:ordre2, 0:ordre2]) @ D[0, 1:ordre2+1].reshape(ordre2, 1)  # ordre 
+    E1 = np.append([1], E)  # vecteur de coefficients incluant a0(ordre 4)
+    H1 = np.append([1], H)
+    
+    #trace de la serie entre 0 et le debut de l'intervalle
+    plt.plot(t[debut : fin], y[debut : fin])
+    plt.title(serie)
+    plt.show()
+    
+    #Tracé des spectres (estimation)
+    f, mag = spectre(E1, H1)
+    
+    #Calcul des spectres des trois sous-series
+    plt.semilogy(
+    	f, mag[0],
+    	f, mag[1],
+    	':r',
+        f, vrai_spectre,':b',
+        linewidth = 2,
+    )
+    plt.title('Spectre / Calcul sur l intervalle [{} {}]'.format(debut, fin))
+    plt.legend(['ordre' + str(ordre1), 'ordre' + str(ordre2), "Vrai spectre"])
+    return plt.show()
+
