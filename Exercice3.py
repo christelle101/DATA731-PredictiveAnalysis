@@ -49,7 +49,17 @@ for k in range(2*int(n/3) + 1, n):
     y3.append(y[k])
     
     
-#Visualisation
-plt.plot(i[0 : int(n/3)], y[0 : int(n/3)])
+#Visualisation de la série 1
+plt.plot(i[0 : int(n/3)], y[0 : int(n/3)], color = '#EC3874')
 plt.title("Serie 1")
+plt.show()
+
+#Visualisation de la série 2
+plt.plot(i[int(n/3) + 1 : 2*int(n/3)], y[int(n/3) + 1 : 2*int(n/3)], y[0:int(n/3)])
+plt.title("Serie 2")
+plt.show()
+
+#Visualisation de la série 3
+plt.plot(i[2*int(n/3) + 1 : n], y[2*int(n/3) + 1:n], color ='#4CAE58')
+plt.title("Serie 3")
 plt.show()
