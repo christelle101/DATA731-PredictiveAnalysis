@@ -48,8 +48,7 @@ for k in range(2*int(n/3) + 1, n):
     y[k] = -c[0]*y[k - 1] - c[1]*y[k - 2] + aleas.gauss(0, 1)
     y3.append(y[k])
     
-y=y[3:]  # suppression des donnees transitoires
-i=i[3:]
+
     
 #Visualisation de la série 1
 plt.plot(i[0 : int(n/3)], y[0 : int(n/3)], color = '#EC3874')
@@ -68,20 +67,6 @@ plt.plot(i[2*int(n/3) + 1 : n], y[2*int(n/3) + 1:n], color ='#4CAE58')
 plt.grid()
 plt.title("Serie 3")
 plt.show()
-
-def estimer_autocorrelation(x):
-    """
-        #Fonction qui permet d'estimer l'autocorrelation
-    """
-    m = len(x)
-    variance = x.var()
-    x = x - x.mean()
-    r = np.correlate(x, x, 'full')
-    resultat = r/(variance*m)
-    return resultat
-
-y= np.array(y)
-acfy = estimer_autocorrelation(y)
 
 
 """
@@ -186,8 +171,7 @@ for k in range(2*int(n/3)+1,n):
     y[k]=-c[0]*y[k-1]-c[1]*y[k-2]+aleas.gauss(0,1)
     y3.append(y[k])
 
-y=y[3:]  # suppression des donnees transitoires
-t=t[3:]
+
 
 def AR_model_somme(debut, fin, serie, vrai_spectre):
     """
