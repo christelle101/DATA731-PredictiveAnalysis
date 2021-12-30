@@ -35,3 +35,21 @@ y = [k*0 for k in i]
 y1 = []
 y2 = []
 y3 = []
+
+for k in range(1, int(n/3)):
+    y[k] = -a[0]*y[k - 1] - a[1]*y[k - 2] + aleas.gauss(0, 1)
+    y1.append(y[k])
+    
+for k in range(int(n/3) + 1, 2*int(n/3)):
+    y[k] = -b[0]*y[k - 1] - b[1]*y[k - 2] + aleas.gauss(0, 1)
+    y2.append(y[k])
+    
+for k in range(2*int(n/3) + 1, n):
+    y[k] = -c[0]*y[k - 1] - c[1]*y[k - 2] + aleas.gauss(0, 1)
+    y3.append(y[k])
+    
+    
+#Visualisation
+plt.plot(i[0 : int(n/3)], y[0 : int(n/3)])
+plt.title("Serie 1")
+plt.show()
