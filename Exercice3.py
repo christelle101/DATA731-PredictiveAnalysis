@@ -239,3 +239,17 @@ AR_model_somme(int(n/3),2*int(n/3),"série 2",spectre2)
 AR_model_somme(0,n,"serie 3",spectre3)
 
 #Spectre de la somme de y1, y2, y3
+s=[]
+for i in range(2):
+  s.append(a[i]+b[i]+c[i])
+
+f,mag=spectre([1]+s)
+spectreS = mag[0]
+
+plt.semilogy(
+	f,mag[0],
+)
+plt.grid() 
+plt.legend('spectre1')
+plt.title("Spectre de la somme")
+plt.show()
