@@ -1,22 +1,22 @@
-"""
-Created on Wed Dec 29 19:37:18 2021
-
-@author: nomen
-"""
-
 import random as aleas
 import matplotlib.pyplot as plt
 from scipy.signal import freqz
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
+"""
+    random : pour generer des nombres aleatoires
+    matplotlib.pyplot : pour generer des graphiques et gerer leur construction
+    scipy.signal : pour avoir le TF de l'autocorrelation
+    numpy : pour implementer les moyennes et les covariances
+"""
 
 ###########################################################################
 #               EXERCICE 3 - Identification de modèle AR
 ###########################################################################
 
 """
-    Creation de trois series temporelles y1, y2, y3 par simulation stohchastique
+    QUESTION 1 - Creation de trois series temporelles y1, y2, y3 par simulation stohchastique
 """
 #Generation des coefficients
 a = [- 0.0707, 0.2500]
@@ -26,16 +26,13 @@ c = [1.7820, 0.8100]
 #Donnees
 n = 1536
 
-#REMPLACER TOUS LES t PAR DES i
-i = range(- 2, n - 1)
-
-y = [k*0 for k in i]
+t = range(- 2, n - 1)
+y = [k*0 for k in t]
 
 #Creation des series
 y1 = []
 y2 = []
 y3 = []
-
 for k in range(1, int(n/3)):
     y[k] = -a[0]*y[k - 1] - a[1]*y[k - 2] + aleas.gauss(0, 1)
     y1.append(y[k])
@@ -47,23 +44,21 @@ for k in range(int(n/3) + 1, 2*int(n/3)):
 for k in range(2*int(n/3) + 1, n):
     y[k] = -c[0]*y[k - 1] - c[1]*y[k - 2] + aleas.gauss(0, 1)
     y3.append(y[k])
-    
-
-    
+       
 #Visualisation de la série 1
-plt.plot(i[0 : int(n/3)], y[0 : int(n/3)], color = '#EC3874')
+plt.plot(t[0 : int(n/3)], y[0 : int(n/3)], color = '#EC3874')
 plt.grid()
 plt.title("Serie 1")
 plt.show()
 
 #Visualisation de la série 2
-plt.plot(i[int(n/3) + 1 : 2*int(n/3)], y[int(n/3) + 1 : 2*int(n/3)], y[0:int(n/3)])
+plt.plot(t[int(n/3) + 1 : 2*int(n/3)], y[int(n/3) + 1 : 2*int(n/3)], y[0:int(n/3)])
 plt.grid()
 plt.title("Serie 2")
 plt.show()
 
 #Visualisation de la série 3
-plt.plot(i[2*int(n/3) + 1 : n], y[2*int(n/3) + 1:n], color ='#4CAE58')
+plt.plot(t[2*int(n/3) + 1 : n], y[2*int(n/3) + 1:n], color ='#4CAE58')
 plt.grid()
 plt.title("Serie 3")
 plt.show()
@@ -242,7 +237,7 @@ plt.show()
 """
     QUESTION 5 - Modèles AR de plusieurs ordres [NOT WORKING YET]
 """
-
+"""
 def AR_n(debut, fin, serie, vrai_spectre, ordre1, ordre2):
     D = np.cov([
         y[debut : fin] + [0, 0, 0, 0],
@@ -274,5 +269,43 @@ def AR_n(debut, fin, serie, vrai_spectre, ordre1, ordre2):
     )
     plt.title('Spectre / Calcul sur l intervalle [{} {}]'.format(debut, fin))
     plt.legend(['ordre' + str(ordre1), 'ordre' + str(ordre2), "Vrai spectre"])
-    return plt.show()
+    return plt.show()"""
+debut = 0
+fin = n
+ordre1 = 5
+ordre2 = 6
+
+D = np.cov([
+    y[debut : fin] + [0, 0, 0, 0],
+    [0] + y[debut : fin] + [0, 0, 0],
+    [0, 0] + y[debut : fin] + [0, 0],
+    [0, 0, 0] + y[debut : fin] + [0],
+    [0, 0, 0, 0] + y[debut : fin]])
+
+E = np.matmul(-np.linalg.inv(D[0:ordre1, 0:ordre1]),np.matrix.transpose(D[0,1:ordre1 + 1]))
+H = np.matmul(-np.linalg.inv(D[0:ordre1, 0:ordre2]),np.matrix.transpose(D[0,1:ordre2 + 1]))
+"""E = - np.linalg.inv(D[0:ordre1, 0:ordre1]) @ D[0, 1:ordre1+1].reshape(ordre1, 1)  # ordre 
+H = - np.linalg.inv(D[0:ordre2, 0:ordre2]) @ D[0, 1:ordre2+1].reshape(ordre2, 1)  # ordre """
+E1 = np.append([1], E)  # vecteur de coefficients incluant a0(ordre 4)
+H1 = np.append([1], H)
+
+#trace de la serie entre 0 et le debut de l'intervalle
+plt.plot(t[debut : fin], y[debut : fin])
+plt.title("serie ordre 3 et 4")
+plt.show()
+
+#Tracé des spectres (estimation)
+f, mag = spectre(E1, H1)
+
+#Calcul des spectres des trois sous-series
+plt.semilogy(
+	f, mag[0],
+	f, mag[1],
+	':r',
+    f, spectre3,':b',
+    linewidth = 2,
+)
+plt.title('Spectre / Calcul sur l intervalle [{} {}]'.format(debut, fin))
+plt.legend(['ordre' + str(ordre1), 'ordre' + str(ordre2), "Vrai spectre"])
+plt.show()
 
