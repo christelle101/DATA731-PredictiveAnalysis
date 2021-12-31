@@ -1,5 +1,11 @@
 """
     MODULES
+    loadmat : pour gerer un fichier MATLAB
+    sounddevice : pour lire un fichier audio
+    plt : pour gerer les graphiques et les visualisations
+    numpy : pour les operations mathematiques
+    warning : pour ignorer les avertissement de deprecation
+    statsmodel : pour exploiter les modeles statistiques
 """
 from scipy.io import loadmat
 import sounddevice as sd
@@ -10,6 +16,7 @@ from statsmodels.tsa.ar_model import AR
 from scipy.signal import lfilter
 import time
 
+#Permet d'ignorer l'avertissement de déprécation qui s'affiche dans la console à cause de l'utilisation de AR
 warnings.filterwarnings("ignore")
 
 #Chargement de la donnée de parole
@@ -21,6 +28,7 @@ sd.play(DataParole, 8192) # son emis via haut parleur externe
 #Visualisation de la donnée de parole
 plt.plot(DataParole)
 plt.ylabel('Data Parole')
+plt.title("Visualisation de la donnée de parole")
 plt.show() 
 
 #n1 et n2 sont le debut et la fin de la serie a analyser
@@ -58,7 +66,7 @@ plt.plot(range(len(y1[4:])),z[4:],label='Data =series stationnaires 1')
 plt.title("Serie stationnaire 1")
 plt.show()
 
-print(modele_fitted.sigma2)
+#print(modele_fitted.sigma2)
 yf1 = lfilter(coeffAR1[0:9],1,y1)
 
 plt.plot(y1[4:], 'b-', label='data')
@@ -80,8 +88,8 @@ NbTrames = int((n2-n1+1)/m)
 for k in range(1,NbTrames-1):
     y2 = y[k*m -m1 + 1 : (k+1)*m]
     model = AR(y2)
-    model_fitted = model.fit()
-    coeffsAR = model_fitted.params
+    model_fit = model.fit()
+    coeffsAR = model_fit.params
     yf2 = lfilter(coeffsAR[1:8],1,y2)
     residuel2 = y2[m1:m1+m-1]-yf2[m1:m1+m-1]
     residuel = np.concatenate((residuel,residuel2), axis=0)
@@ -90,8 +98,8 @@ for k in range(1,NbTrames-1):
         
         plt.plot(yf2[m1:m1+m-1], 'g-', label='data')
         plt.plot(y2[m1:m1+m-1], 'b-', label='data')
-        plt.title("Trame %d, Estimée vs Réalité "%k)
-        plt.legend('estimee','Vraie')
+        plt.title("Trame %d | Estimée vs Réalité "%k)
+        plt.legend('Estimee','Vraie')
         plt.grid()
         plt.show()
 
