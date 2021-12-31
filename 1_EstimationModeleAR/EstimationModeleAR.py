@@ -9,7 +9,6 @@ import numpy as np
     numpy : pour implementer les moyennes et les covariances
 """
 
-
 #On commence par générer n données
 n=1536 
 
@@ -41,7 +40,8 @@ y=y[3:]  # suppression des donnees transitoires
 t=t[3:]
 
 # Trace- de la serie
-plt.plot(t,y,label='Data = juxtapososition de 3 sous-series stationnaires')
+plt.plot(t,y)
+plt.title("Data = juxtapososition de 3 sous-series stationnaires")
 plt.show()
 
 
@@ -77,7 +77,6 @@ plt.show()
 """
     On choisit de décrire y par un modèle AR d'ordre 3, puis d'ordre 4.
 """
-
 #    Estimation des coefficients des modeles AR d-ordres 3 et 4
 def AR_model(debut, fin, serie, vrai_spectre):
     """
@@ -133,23 +132,23 @@ def AR_model(debut, fin, serie, vrai_spectre):
     différents spectres, conformément au fichier MATLAB associé.
 """
 #calcul sur l'intervalle de 1 à 1536
-#AR_model(1, 1536, "serie 1", mag[0])
+AR_model(1, 1536, "serie 1", mag[0])
 
 #calcul sur l'intervalle 1 à 256
-#AR_model(1, 256, "Série 1 sur l'intervalle [1, 256]", mag[0])
+AR_model(1, 256, "Série 1 sur l'intervalle [1, 256]", mag[0])
 
 #calcul sur l'intervalle de 350 à 605
-#AR_model(350, 605, "Série 1 sur l'intervalle [350, 605]", mag[0])
+AR_model(350, 605, "Série 1 sur l'intervalle [350, 605]", mag[0])
 
 #calcul sur l'intervalle [606, 681]
-#AR_model(606, 681, "Série 2 sur l'intervalle [606 ; 681]", mag[1])
+AR_model(606, 681, "Série 2 sur l'intervalle [606 ; 681]", mag[1])
 
 #calcul sur l'intervalle [700; 955]
-#AR_model(700, 955, "Série 2 sur l'intervalle [700 ; 955]", mag[1])
+AR_model(700, 955, "Série 2 sur l'intervalle [700 ; 955]", mag[1])
 
 #calcul sur l'intervalle [956 ; 1211]
-#AR_model(956, 1211, "Série 2 sur l'intervalle [956 ; 1211]", mag[1])
-#AR_model(956, 1211, "Série 2 sur l'intervalle [956 ; 1211]", mag[2])
+AR_model(956, 1211, "Série 2 sur l'intervalle [956 ; 1211]", mag[1])
+AR_model(956, 1211, "Série 2 sur l'intervalle [956 ; 1211]", mag[2])
 
 #calcul sur l'intervalle [1212; 1467]
 AR_model(1212, 1467, "Série 2 sur l'intervalle [956 ; 1211]", mag[2])
