@@ -398,3 +398,4 @@ def AR_model_somme2(debut, fin, serie, vrai_spectre):
 AR_model_somme2(0,int(n/3),"série 1",spectre1)
 AR_model_somme2(int(n/3),2*int(n/3),"série 2",spectre2)
 AR_model_somme2(0,n,"serie 3",spectre3)
+AR_model_somme2(0,n,"y",y[:])
