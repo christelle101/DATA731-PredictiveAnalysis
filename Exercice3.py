@@ -287,7 +287,7 @@ def AR_n(debut, fin, serie, vrai_spectre, ordre1, ordre2):
     plt.title('Spectre / Calcul sur l intervalle [{} {}]'.format(debut, fin))
     plt.legend(['ordre' + str(ordre1), 'ordre' + str(ordre2), "Vrai spectre"])
     return plt.show()"""
-debut = 0
+"""debut = 0
 fin = n
 ordre1 = 5
 ordre2 = 6
@@ -299,10 +299,9 @@ D = np.cov([
     [0, 0, 0] + y[debut : fin] + [0],
     [0, 0, 0, 0] + y[debut : fin]])
 
-E = np.matmul(-np.linalg.inv(D[0:ordre1, 0:ordre1]),np.matrix.transpose(D[0,1:ordre1 + 1]))
-H = np.matmul(-np.linalg.inv(D[0:ordre1, 0:ordre2]),np.matrix.transpose(D[0,1:ordre2 + 1]))
-"""E = - np.linalg.inv(D[0:ordre1, 0:ordre1]) @ D[0, 1:ordre1+1].reshape(ordre1, 1)  # ordre 
-H = - np.linalg.inv(D[0:ordre2, 0:ordre2]) @ D[0, 1:ordre2+1].reshape(ordre2, 1)  # ordre """
+
+E = - np.linalg.inv(D[0:ordre1, 0:ordre1]) @ D[0, 1:ordre1+1].reshape(ordre1, 1)  # ordre 
+H = - np.linalg.inv(D[0:ordre2, 0:ordre2]) @ D[0, 1:ordre2+1].reshape(ordre2, 1)  # ordre 
 E1 = np.append([1], E)  # vecteur de coefficients incluant a0(ordre 4)
 H1 = np.append([1], H)
 
@@ -325,4 +324,77 @@ plt.semilogy(
 plt.title('Spectre / Calcul sur l intervalle [{} {}]'.format(debut, fin))
 plt.legend(['ordre' + str(ordre1), 'ordre' + str(ordre2), "Vrai spectre"])
 plt.show()
+"""
 
+"""
+    QUESTION 6 - Modélisation de y par un processus AR d'ordre 3 et 4.
+    L'objectif de cette etape est d'estimer les coefficients de ce modele.
+"""
+t=range(-2,n-1)
+
+y=[k*0 for k in t]
+y1 = []
+y2 = []
+y3 = []
+for k in range(1,int(n/3)):
+    y[k]=-a[0]*y[k-1]-a[1]*y[k-2]+aleas.gauss(0,1)
+    y1.append(y[k])
+
+for k in range(int(n/3)+1,2*int(n/3)):
+    y[k]=-b[0]*y[k-1]-b[1]*y[k-2]+aleas.gauss(0,1)
+    y2.append(y[k])
+
+for k in range(2*int(n/3)+1,n):
+    y[k]=-c[0]*y[k-1]-c[1]*y[k-2]+aleas.gauss(0,1)
+    y3.append(y[k])
+
+
+
+def AR_model_somme2(debut, fin, serie, vrai_spectre):
+    """
+        : parametre debut : debut de l'intervalle
+        : parametre fin : fin de l'intervalle
+        : parametre serie : nom de la serie à modéliser
+        : parametre vrai_spectre : vrai spectre à comparer aux résultats 
+        : type debut : int
+        : type fin : int
+        : type serie : string
+        : type vrai_spectre : spectre
+        : return : la serie temporelle et la comparaison entre les spectres
+        : type return : plt.show
+    """
+    D = np.cov([
+        y[debut : fin] + [0, 0, 0, 0],
+        [0] + y[debut : fin] + [0, 0, 0],
+        [0, 0] + y[debut : fin] + [0, 0],
+        [0, 0, 0] + y[debut : fin] + [0],
+        [0, 0, 0, 0] + y[debut : fin]])
+    
+    E = - np.linalg.inv(D[0:3, 0:3]) @ D[0, 1:4].reshape(3, 1)  # car on veut l'avoir à l'ordre 3
+    H = - np.linalg.inv(D[0:4, 0:4]) @ D[0, 1:5].reshape(4, 1)  # car on veut l'avoir à l'ordre 4
+    E1 = np.append([1], E)  # vecteur de coefficients incluant a0(ordre 4)
+    H1 = np.append([1], H)
+    
+    #on trace la série entre 0 et le début de l'intervalle
+    plt.plot(t[debut : fin], y[debut : fin])
+    plt.title(serie)
+    plt.show()
+    
+    #on trace les spectres (estimation)
+    f, mag = spectre(E1, H1)
+    
+    #on calcule les valeurs correspondants aux spectres des 3 sous-series
+    plt.semilogy(
+    	f, mag[0],
+    	f, mag[1],
+    	':r',
+        f, vrai_spectre,':b',
+        linewidth = 2,
+    )
+    plt.title('Spectre / Calcul sur l intervalle [{} {}]'.format(debut, fin))
+    plt.legend(['ordre2', 'ordre3',"vrai spectre"])
+    return plt.show()
+
+AR_model_somme2(0,int(n/3),"série 1",spectre1)
+AR_model_somme2(int(n/3),2*int(n/3),"série 2",spectre2)
+AR_model_somme2(0,n,"serie 3",spectre3)
