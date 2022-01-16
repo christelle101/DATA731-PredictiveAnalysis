@@ -97,12 +97,18 @@ plt.show()
 
 
 """
-    QUESTION 2 - Visualisation de l'autocorrelation pour chaque serie temporelle
+    QUESTION 2 - Visualisation de l'autocorrelation et de la densité spectrale de puissance
+    pour chaque serie temporelle
 """
 #Visualisation de la serie 1
 sm.graphics.tsa.plot_acf(y[0:int(n/3)+1], lags = 40, color = '#EC3874')
 plt.title("Autocorrelation de la serie 1")
 plt.grid() 
+plt.show()
+
+#Tracé de la densité spectrale de puissance de y1
+plt.psd(y1[:])
+plt.title("Densité spectrale de puissance de y1")
 plt.show()
 
 #Visualisation de la serie 2
@@ -111,11 +117,22 @@ plt.grid()
 plt.title("Autocorrelation de la serie 2")
 plt.show()
 
+#Tracé de la densité spectrale de puissance de y2
+plt.psd(y2[:])
+plt.title("Densité spectrale de puissance de y2")
+plt.show()
+
 #Visualisation de la serie 3
 sm.graphics.tsa.plot_acf(y[2*int(n/3)+1:n], lags = 40, color = '#4CAE58')
 plt.grid() 
 plt.title("Autocorrelation de la serie 3")
 plt.show()
+
+#Tracé de la densité spectrale de puissance de y3
+plt.psd(y3[:])
+plt.title("Densité spectrale de puissance de y3")
+plt.show()
+
 
 
 """

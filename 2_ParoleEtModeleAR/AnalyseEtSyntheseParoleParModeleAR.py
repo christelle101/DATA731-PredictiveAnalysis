@@ -22,7 +22,7 @@ warnings.filterwarnings("ignore")
 #Chargement de la donnée de parole
 DataParole = loadmat('DataParole.mat')
 DataParole = DataParole['DataParole']
-wait = input("Ajuster le volume - Puis Appuyer sur une touche du clavier pour continuer.")
+wait = input("Ajuster le volume, puis appuyer sur une touche du clavier pour continuer.")
 sd.play(DataParole, 8192) # son emis via haut parleur externe
 
 #Visualisation de la donnée de parole
@@ -62,7 +62,7 @@ z = [k*0 for k in range(len(y1))]
 for k in range (1, len(y1)):
     z[k]=-coeffAR1[0]*y[k - 1] - coeffAR1[1]*y[k - 2]-coeffAR1[2]*y[k - 3]-coeffAR1[3]*y[k - 4]-coeffAR1[4]*y[k - 5]-coeffAR1[5]*y[k - 6]-coeffAR1[6]*y[k - 7]-coeffAR1[7]*y[k - 8]
 
-plt.plot(range(len(y1[4:])),z[4:],label='Data =series stationnaires 1')
+plt.plot(range(len(y1[4:])),z[4:])
 plt.title("Serie stationnaire 1")
 plt.show()
 
